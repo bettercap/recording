@@ -75,12 +75,11 @@ func Load(fileName string, cb LoadProgress) (*Archive, error) {
 		return nil, fmt.Errorf("error while parsing %s: %s", fileName, err)
 	}
 
-	rec.Session.NumStates = len(rec.Session.States)
-	rec.Session.progress = rec.onPartialProgress
-	rec.Events.NumStates = len(rec.Events.States)
-	rec.Events.progress = rec.onPartialProgress
+	rec.Session.OnProgress(rec.onPartialProgress)
+	rec.Events.OnProgress(rec.onPartialProgress)
+
 	rec.fileName = fileName
-	rec.total = rec.Session.NumStates + rec.Events.NumStates + 2
+	rec.total = rec.Session.Frames() + rec.Events.Frames()
 	rec.progress = 0.0
 	rec.done = 0
 	rec.onProgress = cb

@@ -68,8 +68,6 @@ func main() {
 	}
 
 	PrintMemUsage()
-	runtime.GC()
-	PrintMemUsage()
 
 	if memProfile != "" {
 		f, err := os.Create(memProfile)

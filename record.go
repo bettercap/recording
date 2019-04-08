@@ -2,6 +2,7 @@ package recording
 
 import (
 	"encoding/json"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -73,6 +74,11 @@ func (e *Record) addFrameAt(idx int, f frame) {
 func (e *Record) Compile() error {
 	e.Lock()
 	defer e.Unlock()
+
+	defer func() {
+		// after generating the frames, free as much memory as possible
+		runtime.GC()
+	}()
 
 	// reset the state
 	e.current = e.Head
